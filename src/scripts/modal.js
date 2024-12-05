@@ -1,4 +1,5 @@
-import {createFormListener, removeFormListener, showPopupInfo} from "./popupEdit";
+import {createFormListener, removeFormListener, showPopupInfo, isEditHandlerAdded} from "./popupEdit";
+import {createNewCardListener, removeNewCardListener, cleanInputFields, isNewCardHandlerAdded} from "./popupNewCard";
 
 function handler(evt) {
     if (evt.key === 'Escape') {
@@ -9,7 +10,15 @@ function handler(evt) {
 function close() {
     document.querySelector(".popup_is-opened").classList.remove('popup_is-opened');
     document.removeEventListener('keydown', handler);
-    removeFormListener();
+
+    if (isEditHandlerAdded) {
+        removeFormListener();
+    }
+
+    if (isNewCardHandlerAdded) {
+        removeNewCardListener();
+        cleanInputFields();
+    }
 };
 
 function openPopup(button, popup) {
@@ -23,6 +32,8 @@ function openPopup(button, popup) {
         } else if (popup.classList.contains('popup_type_image')) {
             popup.querySelector('.popup__image').src = button.src;
             popup.querySelector('.popup__caption').textContent = button.alt;
+        } else {
+            createNewCardListener();
         }
     })
 };

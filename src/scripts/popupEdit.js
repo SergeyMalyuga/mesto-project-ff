@@ -1,28 +1,31 @@
 import {close} from "./modal";
+import {formEditProfile} from "../main";
 
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const popupEdit = document.querySelector('.popup_type_edit');
-const formElement = document.querySelector('.popup__form');
+let isEditHandlerAdded = false;
 
 function showPopupInfo() {
-    formElement.querySelector('.popup__input_type_name').value = profileTitle.textContent;
-    formElement.querySelector('.popup__input_type_description').value = profileDescription.textContent;
+    formEditProfile.querySelector('.popup__input_type_name').value = profileTitle.textContent;
+    formEditProfile.querySelector('.popup__input_type_description').value = profileDescription.textContent;
 }
 
 function editProfileInfo(evt) {
     evt.preventDefault();
-    profileTitle.textContent = formElement.querySelector('.popup__input_type_name').value;
-    profileDescription.textContent = formElement.querySelector('.popup__input_type_description').value;
+    profileTitle.textContent = formEditProfile.querySelector('.popup__input_type_name').value;
+    profileDescription.textContent = formEditProfile.querySelector('.popup__input_type_description').value;
     close(popupEdit);
 }
 
 function createFormListener() {
-    formElement.addEventListener('submit', editProfileInfo);
+    formEditProfile.addEventListener('submit', editProfileInfo);
+    isEditHandlerAdded = true;
 }
 
 function removeFormListener() {
-    formElement.removeEventListener('submit', editProfileInfo);
+    formEditProfile.removeEventListener('submit', editProfileInfo);
+    isEditHandlerAdded = false;
 }
 
-export {showPopupInfo, createFormListener, removeFormListener};
+export {showPopupInfo, createFormListener, removeFormListener, isEditHandlerAdded};

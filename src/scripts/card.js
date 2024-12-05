@@ -1,5 +1,4 @@
-import {initialCards} from "./data.js";
-import {openPopup,closePopup} from "./modal";
+import {openPopup} from "./modal";
 import {popupImage} from "../main";
 
 const cardTemplate = document.querySelector('#card-template').content;
@@ -11,11 +10,11 @@ const cardTemplate = document.querySelector('#card-template').content;
  * @returns Object card
  * @description create new Card
  */
-function createCard(card, removeCard) {
+function createCard(card) {
     const newCard = cardTemplate.querySelector('.card').cloneNode(true);
 
     newCard.querySelector('.card__image').src = card.link;
-    newCard.querySelector('.card__image').alt = card.alt;
+    newCard.querySelector('.card__image').alt = card.alt ? card.alt : 'отсутсвует';
     newCard.querySelector('.card__title').textContent = card.name;
     newCard.querySelector('.card__delete-button').addEventListener('click', removeCard);
     openPopup(newCard.querySelector('.card__image'), popupImage);
@@ -27,9 +26,13 @@ function removeCard(evt) {
     card.remove();
 }
 
-function addCard() {
+function addCard(cards) {
     const places = document.querySelector('.places__list');
-    initialCards.forEach((card) => places.append(createCard(card, removeCard)));
+    if (cards.length > 1) {
+        cards.forEach((card) => places.append(createCard(card)));
+    } else {
+        places.prepend(createCard(cards));
+    }
 }
 
 export {addCard};
