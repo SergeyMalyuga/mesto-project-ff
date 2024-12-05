@@ -1,8 +1,8 @@
 import {initialCards} from "./data.js";
 import {openPopup,closePopup} from "./modal";
+import {popupImage} from "../main";
 
 const cardTemplate = document.querySelector('#card-template').content;
-const placesList = document.querySelector('.places-list');
 
 /**
  *
@@ -18,7 +18,7 @@ function createCard(card, removeCard) {
     newCard.querySelector('.card__image').alt = card.alt;
     newCard.querySelector('.card__title').textContent = card.name;
     newCard.querySelector('.card__delete-button').addEventListener('click', removeCard);
-    addPopup(newCard);
+    openPopup(newCard.querySelector('.card__image'), popupImage);
     return newCard;
 }
 
@@ -30,15 +30,6 @@ function removeCard(evt) {
 function addCard() {
     const places = document.querySelector('.places__list');
     initialCards.forEach((card) => places.append(createCard(card, removeCard)));
-}
-
-function addPopup(newCard) {
-    const popupImage = document.querySelector('.popup_type_image');
-    popupImage.querySelector('.popup__image').src = newCard.querySelector('.card__image').src;
-    popupImage.querySelector('.popup__caption').textContent = newCard.querySelector('.card__image').alt;
-    openPopup(newCard.querySelector('.card__image'), popupImage);
-    closePopup(popupImage);
-    return newCard;
 }
 
 export {addCard};
