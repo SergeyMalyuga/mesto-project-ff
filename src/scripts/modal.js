@@ -1,16 +1,29 @@
-import {createFormListener, removeFormListener, showPopupInfo, isEditHandlerAdded} from "./popupEdit";
-import {createNewCardListener, removeNewCardListener, cleanInputFields, isNewCardHandlerAdded} from "./popupNewCard";
+import {createFormListener, isEditHandlerAdded, removeFormListener, showPopupInfo} from "./popupEdit";
+import {cleanInputFields, createNewCardListener, isNewCardHandlerAdded, removeNewCardListener} from "./popupNewCard";
 
 function handler(evt) {
     if (evt.key === 'Escape') {
+        evt.preventDefault();
         close();
     }
-}
+};
+
+function onClickButtonClose(evt) {
+    if (evt.target.classList.contains('popup__close')) {
+        close();
+    }
+};
+
+function onClickOverlay(evt) {
+    if (evt.target.classList.contains('popup_is-opened')) {
+        close();
+    }
+};
 
 function close() {
+    removeListeners();
     document.querySelector(".popup_is-opened").classList.remove('popup_is-opened');
     document.removeEventListener('keydown', handler);
-    removeListeners();
 };
 
 function openPopup(button, popup) {
@@ -18,20 +31,13 @@ function openPopup(button, popup) {
         popup.classList.add('popup_is-opened');
         document.addEventListener('keydown', handler);
         detectModalWindow(button, popup);
+        closePopup(popup);
     })
 };
 
 function closePopup(popup) {
-    popup.addEventListener('click', (evt) => {
-        if (evt.target.classList.contains('popup_is-opened')) {
-            close();
-        }
-    });
-    popup.addEventListener('click', (evt) => {
-        if (evt.target.classList.contains('popup__close')) {
-            close();
-        }
-    });
+    popup.addEventListener('click', onClickButtonClose);
+    popup.addEventListener('click', onClickOverlay);
 };
 
 function removeListeners() {
@@ -41,6 +47,8 @@ function removeListeners() {
         removeNewCardListener();
         cleanInputFields();
     }
+    document.querySelector(".popup_is-opened").removeEventListener('click', onClickButtonClose);
+    document.querySelector(".popup_is-opened").removeEventListener('click', onClickOverlay);
 };
 
 function detectModalWindow(button, popup) {
@@ -53,6 +61,6 @@ function detectModalWindow(button, popup) {
     } else {
         createNewCardListener();
     }
-}
+};
 
-export {openPopup, closePopup, close};
+export {openPopup, close};

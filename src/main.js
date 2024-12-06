@@ -1,6 +1,6 @@
 import './pages/index.css';
 import {addCard} from "./scripts/card";
-import {openPopup, closePopup} from "./scripts/modal";
+import {openPopup} from "./scripts/modal";
 import {initialCards} from "./scripts/data";
 
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -16,11 +16,7 @@ const formEditProfile = document.querySelector('[name="edit-profile"]');
 addCard(initialCards);
 
 openPopup(profileEditButton, popupEdit);
-closePopup(popupEdit);
 
 openPopup(profileAddButton, popupNewCard);
-closePopup(popupNewCard);
-
-closePopup(popupImage);
 
 export {popupImage, formNewCard, formEditProfile, popupNewCard};
