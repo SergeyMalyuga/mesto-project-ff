@@ -5,6 +5,7 @@ import {formNewCard, popupNewCard} from "../main";
 let isNewCardHandlerAdded = false;
 
 function createNewCard(evt) {
+
     evt.preventDefault();
     const card = {
         name: formNewCard.querySelector('.popup__input_type_card-name').value,

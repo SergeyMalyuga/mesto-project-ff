@@ -1,7 +1,6 @@
 import './pages/index.css';
 import {addCard} from "./scripts/card";
 import {openPopup, closePopup} from "./scripts/modal";
-
 import {initialCards} from "./scripts/data";
 
 const profileEditButton = document.querySelector('.profile__edit-button');
@@ -12,7 +11,7 @@ const popupNewCard = document.querySelector('.popup_type_new-card');
 
 const popupImage = document.querySelector('.popup_type_image');
 const formNewCard = document.querySelector('[name="new-place"]');
-const formEditProfile= document.querySelector('[name="edit-profile"]');
+const formEditProfile = document.querySelector('[name="edit-profile"]');
 
 addCard(initialCards);
 
