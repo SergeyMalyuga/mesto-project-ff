@@ -1,9 +1,5 @@
-import {openPopup} from "./modal";
-import {popupImage} from "../main";
-import {likeButton} from "./likeButton";
-
 const cardTemplate = document.querySelector('#card-template').content;
-const ONE_CARD = 1;
+const places = document.querySelector('.places__list');
 
 /**
  *
@@ -12,13 +8,13 @@ const ONE_CARD = 1;
  * @returns Object card
  * @description create new Card
  */
-function createCard(card, likeButton, openPopup) {
+function createCard(card, likeButton, cardClick) {
     const newCard = cardTemplate.querySelector('.card').cloneNode(true);
     newCard.querySelector('.card__image').src = card.link;
-    newCard.querySelector('.card__image').alt = card.alt ? card.alt : 'отсутсвует';
+    newCard.querySelector('.card__image').alt = card.name;
     newCard.querySelector('.card__title').textContent = card.name;
     newCard.querySelector('.card__delete-button').addEventListener('click', removeCard);
-    openPopup(newCard.querySelector('.card__image'), popupImage);
+    cardClick(newCard);
     likeButton(newCard);
     return newCard;
 };
@@ -28,13 +24,8 @@ function removeCard(evt) {
     card.remove();
 };
 
-function addCard(cards) {
-    const places = document.querySelector('.places__list');
-    if (cards.length > ONE_CARD) {
-        cards.forEach((card) => places.append(createCard(card, likeButton, openPopup)));
-    } else {
-        places.prepend(createCard(cards, likeButton, openPopup));
-    }
+function addCard(card, likeButton, cardClick) {
+    places.prepend(createCard(card, likeButton, cardClick));
 };
 
-export {addCard};
+export {addCard, createCard};
