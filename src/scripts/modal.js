@@ -1,16 +1,12 @@
-let onKeyDownEsc;
-
-function createHandler(popup) {
-    return function handler(evt) {
-        if (evt.key === 'Escape') {
-            evt.preventDefault();
-            closeModal(popup);
-        }
-    };
+function onKeyDownEsc(evt) {
+    if (evt.key === 'Escape') {
+        evt.preventDefault();
+        const openedPopup = document.querySelector('.popup_is-opened');
+        closeModal(openedPopup);
+    }
 }
 
 function openModal(popup) {
-    onKeyDownEsc = createHandler(popup);
     popup.classList.add('popup_is-opened');
     document.addEventListener('keydown', onKeyDownEsc);
 };

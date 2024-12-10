@@ -1,5 +1,5 @@
 import './pages/index.css';
-import {createCard, removeCard, likeStatus, cardClick} from "./scripts/card";
+import {createCard, removeCard, likeStatus} from "./scripts/card";
 import {closeModal, openModal} from "./scripts/modal";
 import {cards} from "./scripts/cards";
 
@@ -27,15 +27,19 @@ const inputUrl = formNewCard.querySelector('.popup__input_type_url');
 const inputTypeName = formEditProfile.querySelector('.popup__input_type_name');
 const inputTypeDescription = formEditProfile.querySelector('.popup__input_type_description')
 
-function addCards(cards, likeStatus, cardClick, removeCard) {
-    cards.forEach((card) => places.append(createCard(card, likeStatus, cardClick, removeCard)));
+const popupImagePicture = document.querySelector('.popup__image');
+const popupImageDescription = popupImage.querySelector('.popup__caption')
+
+
+function addCards(cards, likeStatus, openPopupImage, removeCard) {
+    cards.forEach((card) => places.append(createCard(card, likeStatus, openPopupImage, removeCard)));
 };
 
-function addCard(card, likeStatus, cardClick, removeCard) {
-    places.prepend(createCard(card, likeStatus, cardClick, removeCard));
+function addCard(card, likeStatus, openPopupImage, removeCard) {
+    places.prepend(createCard(card, likeStatus, openPopupImage, removeCard));
 };
 
-addCards(cards, likeStatus, cardClick, removeCard);
+addCards(cards, likeStatus, openPopupImage, removeCard);
 
 profileEditButton.addEventListener('click', () => {
     openModal(popupEdit);
@@ -83,8 +87,15 @@ function createNewCard(evt) {
         name: inputCardName.value,
         link: inputUrl.value
     }
-    addCard(card, likeStatus, cardClick, removeCard);
+    addCard(card, likeStatus, openPopupImage, removeCard);
     closeModal(popupCard);
+};
+
+function openPopupImage(evt) {
+    openModal(popupImage);
+    popupImagePicture.src = evt.target.src;
+    popupImagePicture.alt = evt.target.alt;
+    popupImageDescription.textContent = evt.target.alt;
 };
 
 formEditProfile.addEventListener('submit', editProfileInfo);
