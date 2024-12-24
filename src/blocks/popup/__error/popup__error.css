@@ -1,6 +1,7 @@
-.popup__input-error {
+.popup__error {
     position: absolute;
-    top: calc(100%);
+    display: block;
+    top: 100%;
     left: 0;
     opacity: 0;
     color: #F00;
@@ -9,4 +10,5 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    transition: opacity 0.3s;
 }
