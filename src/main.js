@@ -1,6 +1,7 @@
 import './pages/index.css';
 import {createCard, removeCard, likeStatus} from "./scripts/card";
 import {closeModal, openModal} from "./scripts/modal";
+import {enableValidation} from "./scripts/validation";
 import {cards} from "./scripts/cards";
 
 const places = document.querySelector('.places__list');
@@ -100,7 +101,7 @@ function openPopupImage(evt) {
 
 formEditProfile.addEventListener('submit', editProfileInfo);
 formNewCard.addEventListener('submit', createNewCard);
-
+enableValidation();
 
 
 
