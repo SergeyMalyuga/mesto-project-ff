@@ -2,7 +2,7 @@ function showInputError(formElement, inputElement, validationConfig) {
     const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
     inputElement.classList.add(validationConfig.inputErrorClass);
     errorElement.classList.add(validationConfig.errorClass);
-    errorElement.textContent = inputElement.validationMessage;
+    errorElement.textContent = setErrorMessage(inputElement);
 }
 
 function hideInputError(formElement, inputElement, validationConfig) {
@@ -14,7 +14,6 @@ function hideInputError(formElement, inputElement, validationConfig) {
 
 function isValid(formElement, inputElement, validationConfig) {
     if (!inputElement.validity.valid) {
-        setErrorMessage(inputElement);
         showInputError(formElement, inputElement, validationConfig);
     } else {
         hideInputError(formElement, inputElement, validationConfig);
@@ -24,17 +23,18 @@ function isValid(formElement, inputElement, validationConfig) {
 function setEventListeners(formElement, validationConfig) {
     const inputList = Array.from(formElement.querySelectorAll(validationConfig.inputSelector));
     inputList.forEach((input) => {
-        input.addEventListener('input', (evt) => {
+        input.addEventListener('input', () => {
             isValid(formElement, input, validationConfig);
+            toggleButtonState(formElement, validationConfig)
         })
     });
 }
 
 function setErrorMessage(inputElement) {
     if (inputElement.validity.patternMismatch) {
-        inputElement.setCustomValidity(inputElement.dataset.patternMessage);
+        return inputElement.dataset.patternMessage;
     } else {
-        inputElement.setCustomValidity('');
+        return inputElement.validationMessage;
     }
 }
 
@@ -56,7 +56,7 @@ function toggleButtonState(form, validationConfig) {
 };
 
 function clearValidation(form, validationConfig) {
-    const inputList = form.querySelectorAll(validationConfig.inputSelector);
+    const inputList = Array.from(form.querySelectorAll(validationConfig.inputSelector));
     inputList.forEach((input) => {
         hideInputError(form, input, validationConfig);
     });

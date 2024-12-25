@@ -51,10 +51,10 @@ function addCard(card, likeStatus, openPopupImage, removeCard) {
 
 addCards(cards, likeStatus, openPopupImage, removeCard);
 
-profileEditButton.addEventListener('click', () => { //TODO popup profile
-    clearValidation(popupEdit, validationConfig);
-    openModal(popupEdit);
+profileEditButton.addEventListener('click', () => {
     showPopupInfo();
+    clearValidation(formEditProfile, validationConfig);
+    openModal(popupEdit);
 });
 profileAddButton.addEventListener('click', () => {
     openModal(popupCard);
@@ -78,6 +78,7 @@ function onClickOverlay(evt, popup) {
 function cleanInputFields() {
     inputCardName.value = '';
     inputUrl.value = '';
+    clearValidation(formNewCard, validationConfig);
 };
 
 function showPopupInfo() {
