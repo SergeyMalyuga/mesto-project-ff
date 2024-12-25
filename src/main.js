@@ -2,7 +2,8 @@ import './pages/index.css';
 import {createCard, removeCard, likeStatus} from "./scripts/card";
 import {closeModal, openModal} from "./scripts/modal";
 import {enableValidation, clearValidation} from "./scripts/validation";
-import {cards} from "./scripts/cards";
+import {getCards, getUserInfo} from "./scripts/api";
+// import {cards} from "./scripts/cards";
 
 const places = document.querySelector('.places__list');
 
@@ -49,7 +50,10 @@ function addCard(card, likeStatus, openPopupImage, removeCard) {
     places.prepend(createCard(card, likeStatus, openPopupImage, removeCard));
 };
 
-addCards(cards, likeStatus, openPopupImage, removeCard);
+Promise.all([getCards, getUserInfo]).then(([getCards, getUserInfo]) => {
+    getCards().then((cards) => addCards(cards, likeStatus, openPopupImage, removeCard));
+    getUserInfo().then((user) => console.log(user)); //TODO delete console.log
+})
 
 profileEditButton.addEventListener('click', () => {
     showPopupInfo();
