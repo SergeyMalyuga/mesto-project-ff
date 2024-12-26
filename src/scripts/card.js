@@ -12,13 +12,8 @@ function createCard(card, likeStatus, openPopupImage, removeCard, countLikes = 0
     return newCard;
 };
 
-function removeCard(evt) {
-    const card = evt.target.closest('.card');
-    card.remove();
-};
-
 function likeStatus(evt) {
     evt.target.classList.toggle('card__like-button_is-active');
 };
 
-export {createCard, removeCard, likeStatus};
+export {createCard, likeStatus};

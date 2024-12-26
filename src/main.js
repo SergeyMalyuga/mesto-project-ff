@@ -1,9 +1,8 @@
 import './pages/index.css';
-import {createCard, removeCard, likeStatus} from "./scripts/card";
+import {createCard, likeStatus} from "./scripts/card";
 import {closeModal, openModal} from "./scripts/modal";
 import {enableValidation, clearValidation} from "./scripts/validation";
-import {getCards, getUserInfo, editProfile, postCard} from "./scripts/api";
-// import {cards} from "./scripts/cards";
+import {getCards, getUserInfo, editProfile, postCard, deleteCard} from "./scripts/api";
 
 const places = document.querySelector('.places__list');
 
@@ -41,18 +40,18 @@ const validationConfig = {
     errorClass: 'popup__error_visible'
 }
 
-
-function addCards(cards, likeStatus, openPopupImage, removeCard) {
-    cards.forEach((card) => places.append(createCard(card, likeStatus, openPopupImage, removeCard, card.likes.length)));
-};
-
 function addCard(card, likeStatus, openPopupImage, removeCard) {
     places.prepend(createCard(card, likeStatus, openPopupImage, removeCard));
 };
 
-Promise.all([getCards, getUserInfo]).then(([getCards, getUserInfo]) => {
-    getCards().then((cards) => addCards(cards, likeStatus, openPopupImage, removeCard));
-    getUserInfo().then((user) => console.log(user)); //TODO delete console.log
+Promise.all([getCards(), getUserInfo()]).then(([cards, user]) => {
+    cards.forEach((card) => {
+        const newCard = createCard(card, likeStatus, openPopupImage, removeCard(card._id), card.likes.length);
+        if (card.owner._id.localeCompare(user._id)) {
+            newCard.querySelector('.card__delete-button').style.display = 'none';
+        }
+        places.append(newCard);
+    })
 })
 
 profileEditButton.addEventListener('click', () => {
@@ -115,6 +114,14 @@ function openPopupImage(evt) {
     popupImagePicture.alt = evt.target.alt;
     popupImageDescription.textContent = evt.target.alt;
 };
+
+function removeCard(cardId) {
+    return function (evt) {
+        const card = evt.target.closest('.card');
+        card.remove();
+        deleteCard(cardId);
+    };
+}
 
 formEditProfile.addEventListener('submit', editProfileInfo);
 formNewCard.addEventListener('submit', createNewCard);

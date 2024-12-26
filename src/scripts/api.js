@@ -82,5 +82,22 @@ function postCard(cardName, cardLink) {
     })
 }
 
-export {getCards, getUserInfo, editProfile, postCard}
+function deleteCard(cardId) {
+    fetch(config.baseUrl + `/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: config.headers.authorization
+        }
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(`Ошибка: ${response.status}`);
+        }
+    }).catch((error) => {
+        console.error(error.message);
+    })
+}
+
+export {getCards, getUserInfo, editProfile, postCard, deleteCard}
 // return Promise.reject(`Ошибка: ${res.status}`); //TODO когда сервер вернул ошибку
