@@ -12,8 +12,4 @@ function createCard(card, likeStatus, openPopupImage, removeCard, countLikes = 0
     return newCard;
 };
 
-function likeStatus(evt) {
-    evt.target.classList.toggle('card__like-button_is-active');
-};
-
-export {createCard, likeStatus};
+export {createCard};

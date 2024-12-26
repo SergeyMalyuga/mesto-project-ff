@@ -19,7 +19,7 @@ function getCards() {
         }
     }).catch((error) => {
         console.log(error);
-    })
+    });
 }
 
 function getUserInfo() {
@@ -35,7 +35,7 @@ function getUserInfo() {
         }
     }).catch((error) => {
         console.error(error.message);
-    })
+    });
 }
 
 function editProfile(profileName, profileDescription) {
@@ -57,7 +57,7 @@ function editProfile(profileName, profileDescription) {
         }
     }).catch((error) => {
         console.error(error.message);
-    })
+    });
 }
 
 function postCard(cardName, cardLink) {
@@ -79,11 +79,46 @@ function postCard(cardName, cardLink) {
         }
     }).catch((error) => {
         console.error(error.message);
-    })
+    });
 }
 
 function deleteCard(cardId) {
-    fetch(config.baseUrl + `/cards/${cardId}`, {
+    return fetch(config.baseUrl + `/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+            authorization: config.headers.authorization
+        }
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(`Ошибка: ${response.status}`);
+        }
+    }).catch((error) => {
+        console.error(error.message);
+    });
+}
+
+function addLike(cardId) {
+    return fetch(config.baseUrl + `/cards/likes/${cardId}`, {
+        method: 'PUT',
+        headers: {
+            authorization: config.headers.authorization
+        }
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(`Ошибка: ${response.status}`);
+        }
+    }).catch((error) => {
+        console.error(error.message);
+    })
+}
+
+
+function deleteLike(cardId) {
+    return fetch(config.baseUrl + `/cards/likes/${cardId}`, {
         method: 'DELETE',
         headers: {
             authorization: config.headers.authorization
@@ -99,5 +134,6 @@ function deleteCard(cardId) {
     })
 }
 
-export {getCards, getUserInfo, editProfile, postCard, deleteCard}
+
+export {getCards, getUserInfo, editProfile, postCard, deleteCard, addLike, deleteLike}
 // return Promise.reject(`Ошибка: ${res.status}`); //TODO когда сервер вернул ошибку

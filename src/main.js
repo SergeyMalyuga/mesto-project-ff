@@ -1,8 +1,9 @@
 import './pages/index.css';
-import {createCard, likeStatus} from "./scripts/card";
+import {createCard} from "./scripts/card";
 import {closeModal, openModal} from "./scripts/modal";
 import {enableValidation, clearValidation} from "./scripts/validation";
-import {getCards, getUserInfo, editProfile, postCard, deleteCard} from "./scripts/api";
+import {getCards, getUserInfo, editProfile, postCard, deleteCard, addLike, deleteLike} from "./scripts/api";
+import {data} from "autoprefixer";
 
 const places = document.querySelector('.places__list');
 
@@ -46,10 +47,15 @@ function addCard(card, likeStatus, openPopupImage, removeCard) {
 
 Promise.all([getCards(), getUserInfo()]).then(([cards, user]) => {
     cards.forEach((card) => {
-        const newCard = createCard(card, likeStatus, openPopupImage, removeCard(card._id), card.likes.length);
-        if (card.owner._id.localeCompare(user._id)) {
+        const newCard = createCard(card, likeStatus(card), openPopupImage, removeCard(card._id), card.likes.length);
+        if (card.owner._id.localeCompare(user._id) < 0) {
             newCard.querySelector('.card__delete-button').style.display = 'none';
         }
+        card.likes.some(like => {
+            if(like._id.localeCompare(user._id) === 0) {
+                newCard.querySelector('.card__like-button').classList.add('card__like-button_is-active');
+            }
+        })
         places.append(newCard);
     })
 })
@@ -121,6 +127,22 @@ function removeCard(cardId) {
         card.remove();
         deleteCard(cardId);
     };
+}
+
+function likeStatus(card) { //TODO refactorng
+    return function (evt) {
+        console.log(evt.target);
+        if (evt.target.classList.contains('card__like-button_is-active')) {
+            deleteLike(card._id).then((data) =>
+                evt.target.closest('.card__like').querySelector('.card__like-count')
+                    .textContent = data.likes.length);
+        } else {
+            addLike(card._id).then((data) => {
+                evt.target.closest('.card__like').querySelector('.card__like-count')
+                    .textContent = data.likes.length; console.log(data.likes);});
+        }
+        evt.target.classList.toggle('card__like-button_is-active');
+    }
 }
 
 formEditProfile.addEventListener('submit', editProfileInfo);
