@@ -43,7 +43,7 @@ const validationConfig = {
 
 
 function addCards(cards, likeStatus, openPopupImage, removeCard) {
-    cards.forEach((card) => places.append(createCard(card, likeStatus, openPopupImage, removeCard)));
+    cards.forEach((card) => places.append(createCard(card, likeStatus, openPopupImage, removeCard, card.likes.length)));
 };
 
 function addCard(card, likeStatus, openPopupImage, removeCard) {
