@@ -2,7 +2,7 @@ import './pages/index.css';
 import {createCard, removeCard, likeStatus} from "./scripts/card";
 import {closeModal, openModal} from "./scripts/modal";
 import {enableValidation, clearValidation} from "./scripts/validation";
-import {getCards, getUserInfo} from "./scripts/api";
+import {getCards, getUserInfo, editProfile, postCard} from "./scripts/api";
 // import {cards} from "./scripts/cards";
 
 const places = document.querySelector('.places__list');
@@ -94,6 +94,7 @@ function editProfileInfo(evt) {
     evt.preventDefault();
     profileTitle.textContent = inputTypeName.value;
     profileDescription.textContent = inputTypeDescription.value;
+    editProfile(inputTypeName.value, inputTypeDescription.value); //TODO
     closeModal(popupEdit);
 };
 
@@ -104,6 +105,7 @@ function createNewCard(evt) {
         link: inputUrl.value
     }
     addCard(card, likeStatus, openPopupImage, removeCard);
+    postCard(card.name, card.link); //TODO
     closeModal(popupCard);
 };
 

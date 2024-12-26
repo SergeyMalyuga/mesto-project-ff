@@ -34,9 +34,53 @@ function getUserInfo() {
             return Promise.reject(`Ошибка: ${response.status}`);
         }
     }).catch((error) => {
-        console.log(error);
+        console.error(error.message);
     })
 }
 
-export {getCards, getUserInfo}
+function editProfile(profileName, profileDescription) {
+    fetch(config.baseUrl + '/users/me', {
+        method: 'PATCH',
+        headers: {
+            authorization: config.headers.authorization,
+            'Content-type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: profileName,
+            about: profileDescription
+        })
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(`Ошибка: ${response.status}`);
+        }
+    }).catch((error) => {
+        console.error(error.message);
+    })
+}
+
+function postCard(cardName, cardLink) {
+    fetch(config.baseUrl + '/cards', {
+        method: 'POST',
+        headers: {
+            authorization: config.headers.authorization,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name: cardName,
+            link: cardLink
+        })
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(`Ошибка: ${response.status}`);
+        }
+    }).catch((error) => {
+        console.error(error.message);
+    })
+}
+
+export {getCards, getUserInfo, editProfile, postCard}
 // return Promise.reject(`Ошибка: ${res.status}`); //TODO когда сервер вернул ошибку
