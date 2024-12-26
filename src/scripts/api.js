@@ -39,7 +39,7 @@ function getUserInfo() {
 }
 
 function editProfile(profileName, profileDescription) {
-    fetch(config.baseUrl + '/users/me', {
+    return fetch(config.baseUrl + '/users/me', {
         method: 'PATCH',
         headers: {
             authorization: config.headers.authorization,
@@ -61,7 +61,7 @@ function editProfile(profileName, profileDescription) {
 }
 
 function postCard(cardName, cardLink) {
-    fetch(config.baseUrl + '/cards', {
+    return fetch(config.baseUrl + '/cards', {
         method: 'POST',
         headers: {
             authorization: config.headers.authorization,
@@ -113,7 +113,7 @@ function addLike(cardId) {
         }
     }).catch((error) => {
         console.error(error.message);
-    })
+    });
 }
 
 
@@ -131,9 +131,28 @@ function deleteLike(cardId) {
         }
     }).catch((error) => {
         console.error(error.message);
-    })
+    });
 }
 
+function patchAvatar(url) {
+    console.log(url);
+    fetch(config.baseUrl + '/users/me/avatar', {
+        method: 'PATCH',
+        headers: {
+            authorization: config.headers.authorization,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({avatar: url})
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            return Promise.reject(`Ошибка: ${response.status}`);
+        }
+    }).catch((error) => {
+        console.error(error.message);
+    });
+}
 
-export {getCards, getUserInfo, editProfile, postCard, deleteCard, addLike, deleteLike}
-// return Promise.reject(`Ошибка: ${res.status}`); //TODO когда сервер вернул ошибку
+export {getCards, getUserInfo, editProfile, postCard, deleteCard, addLike, deleteLike, patchAvatar}
+
