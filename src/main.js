@@ -1,3 +1,4 @@
+
 import './pages/index.css';
 import {createCard} from "./scripts/card";
 import {closeModal, openModal} from "./scripts/modal";
@@ -36,6 +37,7 @@ const popupDeleteCardClose = popupDeleteCard.querySelector('.popup__close');
 
 const popupCardButton = popupCard.querySelector('.popup__button')
 const popupEditButton = popupEdit.querySelector('.popup__button')
+const popupDeleteCardButton = popupDeleteCard.querySelector('.popup__button')
 
 const formNewCard = document.querySelector('[name="new-place"]');
 const formEditProfile = document.querySelector('[name="edit-profile"]');
@@ -50,6 +52,9 @@ const inputProfileImageUrl = document.querySelector('.popup__profile_image_edit_
 const popupImagePicture = document.querySelector('.popup__image');
 const popupImageDescription = popupImage.querySelector('.popup__caption')
 
+let cardToDelete = null;
+let cardIdToDelete = null;
+
 const validationConfig = {
     formSelector: '.popup__form',
     inputSelector: '.popup__input',
@@ -59,8 +64,8 @@ const validationConfig = {
     errorClass: 'popup__error_visible'
 }
 
-function addCard(card, likeStatus, openPopupImage, removeCard) {
-    places.prepend(createCard(card, likeStatus, openPopupImage, removeCard));
+function addCard(card) {
+    places.prepend(createCard(card, likeStatus(card), openPopupImage, removeCard(card._id)));
 };
 
 Promise.all([getCards(), getUserInfo()]).then(([cards, user]) => {
@@ -150,7 +155,9 @@ function createNewCard(evt) {
     evt.preventDefault();
     popupCardButton.textContent = 'Сохранение...';
     postCard(inputCardName.value, inputUrl.value).then((card) => {
-            addCard(card, likeStatus(card), openPopupImage, removeCard(card._id));
+            console.log(card);
+            console.log(card._id);
+            addCard(card);
             popupCardButton.textContent = 'Сохранить'
         }
     );
@@ -167,16 +174,16 @@ function openPopupImage(evt) {
 function removeCard(cardId) {
     return function (evt) {
         openModal(popupDeleteCard);
-        popupDeleteCard.addEventListener('click', (event) => {
-            if (event.target.classList.contains('popup__button')) {
-                const card = evt.target.closest('.card');
-                card.remove();
-                deleteCard(cardId);
-                closeModal(popupDeleteCard);
-            }
-        });
+        cardToDelete = evt.target.closest('.card');
+        cardIdToDelete = cardId;
     }
 }
+
+popupDeleteCardButton.addEventListener('click', () => {
+    cardToDelete.remove();
+    deleteCard(cardIdToDelete);
+    closeModal(popupDeleteCard);
+});
 
 function likeStatus(card) { //TODO refactorng
     return function (evt) {
@@ -198,6 +205,3 @@ formEditProfile.addEventListener('submit', editProfileInfo);
 formNewCard.addEventListener('submit', createNewCard);
 formEditProfileImage.addEventListener('submit', changeAvatar);
 enableValidation(validationConfig);
-
-
-

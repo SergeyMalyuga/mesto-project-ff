@@ -6,7 +6,7 @@ const config = {
     }
 }
 
-function getCards() {
+const getCards = () => {
     return fetch(config.baseUrl + '/cards', {
         headers: {
             authorization: config.headers.authorization
@@ -22,7 +22,7 @@ function getCards() {
     });
 }
 
-function getUserInfo() {
+const getUserInfo = () => {
     return fetch(config.baseUrl + '/users/me', {
         headers: {
             authorization: config.headers.authorization
@@ -38,7 +38,7 @@ function getUserInfo() {
     });
 }
 
-function editProfile(profileName, profileDescription) {
+const editProfile = (profileName, profileDescription) => {
     return fetch(config.baseUrl + '/users/me', {
         method: 'PATCH',
         headers: {
@@ -60,7 +60,7 @@ function editProfile(profileName, profileDescription) {
     });
 }
 
-function postCard(cardName, cardLink) {
+const postCard = (cardName, cardLink) => {
     return fetch(config.baseUrl + '/cards', {
         method: 'POST',
         headers: {
@@ -82,11 +82,12 @@ function postCard(cardName, cardLink) {
     });
 }
 
-function deleteCard(cardId) {
+const deleteCard = (cardId) => {
     return fetch(config.baseUrl + `/cards/${cardId}`, {
         method: 'DELETE',
         headers: {
-            authorization: config.headers.authorization
+            authorization: config.headers.authorization,
+            'Content-Type': 'application/json'
         }
     }).then((response) => {
         if (response.ok) {
@@ -99,7 +100,7 @@ function deleteCard(cardId) {
     });
 }
 
-function addLike(cardId) {
+const addLike = (cardId) => {
     return fetch(config.baseUrl + `/cards/likes/${cardId}`, {
         method: 'PUT',
         headers: {
@@ -117,7 +118,7 @@ function addLike(cardId) {
 }
 
 
-function deleteLike(cardId) {
+const deleteLike = (cardId) => {
     return fetch(config.baseUrl + `/cards/likes/${cardId}`, {
         method: 'DELETE',
         headers: {
@@ -134,8 +135,7 @@ function deleteLike(cardId) {
     });
 }
 
-function patchAvatar(url) {
-    console.log(url);
+const patchAvatar = (url) => {
     fetch(config.baseUrl + '/users/me/avatar', {
         method: 'PATCH',
         headers: {
