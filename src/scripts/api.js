@@ -12,11 +12,7 @@ const getCards = () => {
             authorization: config.headers.authorization
         }
     }).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject(`Ошибка: ${response.status}`);
-        }
+        return checkResponse(response);
     }).catch((error) => {
         console.log(error);
     });
@@ -28,11 +24,7 @@ const getUserInfo = () => {
             authorization: config.headers.authorization
         }
     }).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject(`Ошибка: ${response.status}`);
-        }
+        return checkResponse(response);
     }).catch((error) => {
         console.error(error.message);
     });
@@ -50,11 +42,7 @@ const editProfile = (profileName, profileDescription) => {
             about: profileDescription
         })
     }).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject(`Ошибка: ${response.status}`);
-        }
+        return checkResponse(response);
     }).catch((error) => {
         console.error(error.message);
     });
@@ -72,11 +60,7 @@ const postCard = (cardName, cardLink) => {
             link: cardLink
         })
     }).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject(`Ошибка: ${response.status}`);
-        }
+        return checkResponse(response);
     }).catch((error) => {
         console.error(error.message);
     });
@@ -90,11 +74,7 @@ const deleteCard = (cardId) => {
             'Content-Type': 'application/json'
         }
     }).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject(`Ошибка: ${response.status}`);
-        }
+        return checkResponse(response);
     }).catch((error) => {
         console.error(error.message);
     });
@@ -107,11 +87,7 @@ const addLike = (cardId) => {
             authorization: config.headers.authorization
         }
     }).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject(`Ошибка: ${response.status}`);
-        }
+        return checkResponse(response);
     }).catch((error) => {
         console.error(error.message);
     });
@@ -125,11 +101,7 @@ const deleteLike = (cardId) => {
             authorization: config.headers.authorization
         }
     }).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject(`Ошибка: ${response.status}`);
-        }
+        return checkResponse(response);
     }).catch((error) => {
         console.error(error.message);
     });
@@ -144,14 +116,17 @@ const patchAvatar = (url) => {
         },
         body: JSON.stringify({avatar: url})
     }).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            return Promise.reject(`Ошибка: ${response.status}`);
-        }
+        return checkResponse(response);
     }).catch((error) => {
         console.error(error.message);
     });
+}
+
+function checkResponse(res) {
+    if (res.ok) {
+        return res.json();
+    }
+    return Promise.reject(`Ошибка ${res.status}`);
 }
 
 export {getCards, getUserInfo, editProfile, postCard, deleteCard, addLike, deleteLike, patchAvatar}
