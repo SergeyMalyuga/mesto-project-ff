@@ -1,5 +1,5 @@
 import './pages/index.css';
-import {createCard} from "./scripts/card";
+import {createCard, changeLikeStatus} from "./scripts/card";
 import {closeModal, openModal} from "./scripts/modal";
 import {enableValidation, clearValidation} from "./scripts/validation";
 import {
@@ -8,8 +8,6 @@ import {
     editProfile,
     postCard,
     deleteCard,
-    addLike,
-    deleteLike,
     patchAvatar
 } from "./scripts/api";
 
@@ -63,13 +61,13 @@ const validationConfig = {
     errorClass: 'popup__error_visible'
 }
 
-function addCard(card) {
-    places.prepend(createCard(card, changeLikeStatus(card), openPopupImage(card), removeCard));
+function addCard(card, user) {
+    places.prepend(createCard(card, user, changeLikeStatus, openPopupImage(card), removeCard));
 };
 
 Promise.all([getCards(), getUserInfo()]).then(([cards, user]) => {
     cards.forEach((card) => {
-        const newCard = createCard(card, user, changeLikeStatus(card), openPopupImage(card), removeCard, card.likes.length);
+        const newCard = createCard(card, user, changeLikeStatus, openPopupImage(card), removeCard, card.likes.length);
         places.append(newCard);
         profileTitle.textContent = user.name;
         profileImage.style.backgroundImage = `url(${user.avatar})`;
@@ -155,12 +153,11 @@ function changeAvatar(evt) {
 function createNewCard(evt) {
     evt.preventDefault();
     popupCardButton.textContent = 'Сохранение...';
-    postCard(inputCardName.value, inputUrl.value).then((card) => {
-            addCard(card);
+    Promise.all([postCard(inputCardName.value, inputUrl.value), getUserInfo()])
+        .then(([card, user]) => {
+            addCard(card, user);
             closeModal(popupCard);
-
-        }
-    ).catch((error) => {
+        }).catch((error) => {
         console.log(error);
     }).finally(() => popupCardButton.textContent = 'Сохранить');
 };
@@ -188,27 +185,6 @@ popupDeleteCardButton.addEventListener('click', () => {
         console.log(error);
     });
 });
-
-function chooseLikeStatus(likeStatus, evt, card) {
-    likeStatus(card._id).then((data) => {
-        evt.target.closest('.card__like').querySelector('.card__like-count')
-            .textContent = data.likes.length;
-        evt.target.classList.toggle('card__like-button_is-active');
-    })
-        .catch((error) => {
-            console.log(error);
-        })
-}
-
-function changeLikeStatus(card) {
-    return function (evt) {
-        if (evt.target.classList.contains('card__like-button_is-active')) {
-            chooseLikeStatus(deleteLike, evt, card);
-        } else {
-            chooseLikeStatus(addLike, evt, card)
-        }
-    }
-}
 
 formEditProfile.addEventListener('submit', editProfileInfo);
 formNewCard.addEventListener('submit', createNewCard);

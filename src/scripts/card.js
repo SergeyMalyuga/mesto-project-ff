@@ -1,28 +1,51 @@
+import {addLike, deleteLike} from "./api";
+
 const cardTemplate = document.querySelector('#card-template').content;
 
 function createCard(card, user, likeStatus, openPopupImage, removeCard, countLikes = 0) {
     const newCard = cardTemplate.querySelector('.card').cloneNode(true);
+    const likeCount = newCard.querySelector('.card__like-count');
+    const likeButton = newCard.querySelector('.card__like-button');
+    const deleteButton = newCard.querySelector('.card__delete-button');
     newCard.querySelector('.card__image').src = card.link;
     newCard.querySelector('.card__image').alt = card.name;
     newCard.querySelector('.card__title').textContent = card.name;
-    newCard.querySelector('.card__like-count').textContent = countLikes;
-    newCard.querySelector('.card__delete-button').addEventListener('click', () =>
+    likeCount.textContent = countLikes;
+    deleteButton.addEventListener('click', () =>
         removeCard(card._id, newCard));
-    newCard.querySelector('.card__like-button').addEventListener('click', likeStatus);
+    likeButton.addEventListener('click', () => likeStatus(card, likeButton, deleteButton, likeCount));
     newCard.querySelector('.card__image').addEventListener('click', openPopupImage);
-    isUserOwner(card, user, newCard);
+    isUserOwner(card, user, deleteButton, likeButton);
     return newCard;
 };
 
-function isUserOwner(card, user, newCard) {
-    if (card.owner._id.localeCompare(user._id) < 0) {
-        newCard.querySelector('.card__delete-button').style.display = 'none';
+function isUserOwner(card, user, deleteButton, likeButton) {
+    if (card.owner._id.localeCompare(user._id) !== 0) {
+        deleteButton.style.display = 'none';
     }
     card.likes.some(like => {
         if (like._id.localeCompare(user._id) === 0) {
-            newCard.querySelector('.card__like-button').classList.add('card__like-button_is-active');
+            likeButton.classList.add('card__like-button_is-active');
         }
     })
 }
 
-export {createCard};
+function chooseLikeStatus(likeStatus, card, likeButton, deleteButton, likeCount) {
+    likeStatus(card._id).then((data) => {
+        likeCount.textContent = data.likes.length;
+        likeButton.classList.toggle('card__like-button_is-active');
+    })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+
+function changeLikeStatus(card, likeButton, deleteButton, likeCount) {
+        if (likeButton.classList.contains('card__like-button_is-active')) {
+            chooseLikeStatus(deleteLike, card, likeButton, deleteButton, likeCount);
+        } else {
+            chooseLikeStatus(addLike, card, likeButton, deleteButton, likeCount)
+        }
+}
+
+export {createCard, changeLikeStatus};
