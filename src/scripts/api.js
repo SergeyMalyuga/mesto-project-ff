@@ -94,7 +94,7 @@ const deleteLike = (cardId) => {
 }
 
 const patchAvatar = (url) => {
-    fetch(config.baseUrl + '/users/me/avatar', {
+    return fetch(config.baseUrl + '/users/me/avatar', {
         method: 'PATCH',
         headers: {
             authorization: config.headers.authorization,
