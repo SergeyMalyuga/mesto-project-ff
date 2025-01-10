@@ -84,7 +84,9 @@ Promise.all([getCards(), getUserInfo()]).then(([cards, user]) => {
         profileImage.style.backgroundImage = `url(${user.avatar})`;
         profileDescription.textContent = user.about;
     })
-})
+}).catch((error) => {
+    console.log(error);
+});
 
 profileEditButton.addEventListener('click', () => {
     showPopupInfo();
@@ -137,7 +139,9 @@ function editProfileInfo(evt) {
     profileTitle.textContent = inputTypeName.value;
     profileDescription.textContent = inputTypeDescription.value;
     editProfile(inputTypeName.value, inputTypeDescription.value).then(() =>
-        popupEditButton.textContent = 'Сохранить');
+        popupEditButton.textContent = 'Сохранить').catch((error) => {
+        console.log(error);
+    });
     closeModal(popupEdit);
 };
 
@@ -145,7 +149,9 @@ function changeAvatar(evt) {
     evt.preventDefault();
     const imageUrl = inputProfileImageUrl.value;
     profileImage.style.backgroundImage = `url(${imageUrl})`;
-    patchAvatar(imageUrl);
+    patchAvatar(imageUrl).catch((error) => {
+        console.log(error);
+    });
     closeModal(popupProfileImageEdit);
 }
 
@@ -158,7 +164,9 @@ function createNewCard(evt) {
             addCard(card);
             popupCardButton.textContent = 'Сохранить'
         }
-    );
+    ).catch((error) => {
+        console.log(error);
+    });
     closeModal(popupCard);
 };
 
@@ -179,7 +187,9 @@ function removeCard(cardId) {
 
 popupDeleteCardButton.addEventListener('click', () => {
     cardToDelete.remove();
-    deleteCard(cardIdToDelete);
+    deleteCard(cardIdToDelete).catch((error) => {
+        console.log(error);
+    });
     closeModal(popupDeleteCard);
 });
 
@@ -193,6 +203,8 @@ function likeStatus(card) {
             addLike(card._id).then((data) => {
                 evt.target.closest('.card__like').querySelector('.card__like-count')
                     .textContent = data.likes.length;
+            }).catch((error) => {
+                console.log(error);
             });
         }
         evt.target.classList.toggle('card__like-button_is-active');

@@ -13,9 +13,7 @@ const getCards = () => {
         }
     }).then((response) => {
         return checkResponse(response);
-    }).catch((error) => {
-        console.log(error);
-    });
+    })
 }
 
 const getUserInfo = () => {
@@ -25,9 +23,7 @@ const getUserInfo = () => {
         }
     }).then((response) => {
         return checkResponse(response);
-    }).catch((error) => {
-        console.error(error.message);
-    });
+    })
 }
 
 const editProfile = (profileName, profileDescription) => {
@@ -43,9 +39,7 @@ const editProfile = (profileName, profileDescription) => {
         })
     }).then((response) => {
         return checkResponse(response);
-    }).catch((error) => {
-        console.error(error.message);
-    });
+    })
 }
 
 const postCard = (cardName, cardLink) => {
@@ -61,9 +55,7 @@ const postCard = (cardName, cardLink) => {
         })
     }).then((response) => {
         return checkResponse(response);
-    }).catch((error) => {
-        console.error(error.message);
-    });
+    })
 }
 
 const deleteCard = (cardId) => {
@@ -75,9 +67,7 @@ const deleteCard = (cardId) => {
         }
     }).then((response) => {
         return checkResponse(response);
-    }).catch((error) => {
-        console.error(error.message);
-    });
+    })
 }
 
 const addLike = (cardId) => {
@@ -88,9 +78,7 @@ const addLike = (cardId) => {
         }
     }).then((response) => {
         return checkResponse(response);
-    }).catch((error) => {
-        console.error(error.message);
-    });
+    })
 }
 
 
@@ -102,9 +90,7 @@ const deleteLike = (cardId) => {
         }
     }).then((response) => {
         return checkResponse(response);
-    }).catch((error) => {
-        console.error(error.message);
-    });
+    })
 }
 
 const patchAvatar = (url) => {
@@ -117,9 +103,7 @@ const patchAvatar = (url) => {
         body: JSON.stringify({avatar: url})
     }).then((response) => {
         return checkResponse(response);
-    }).catch((error) => {
-        console.error(error.message);
-    });
+    })
 }
 
 function checkResponse(res) {
