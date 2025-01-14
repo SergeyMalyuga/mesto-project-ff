@@ -51,6 +51,7 @@ const popupImageDescription = popupImage.querySelector('.popup__caption')
 
 let cardToDelete = null;
 let cardIdToDelete = null;
+let userId = null;
 
 const validationConfig = {
     formSelector: '.popup__form',
@@ -61,13 +62,14 @@ const validationConfig = {
     errorClass: 'popup__error_visible'
 }
 
-function addCard(card, user) {
-    places.prepend(createCard(card, user, changeLikeStatus, openPopupImage(card), removeCard));
+function addCard(card) {
+    places.prepend(createCard(card, userId, changeLikeStatus, openPopupImage(card), removeCard));
 };
 
 Promise.all([getCards(), getUserInfo()]).then(([cards, user]) => {
     cards.forEach((card) => {
-        const newCard = createCard(card, user, changeLikeStatus, openPopupImage(card), removeCard, card.likes.length);
+        userId = user._id;
+        const newCard = createCard(card, userId, changeLikeStatus, openPopupImage(card), removeCard, card.likes.length);
         places.append(newCard);
         profileTitle.textContent = user.name;
         profileImage.style.backgroundImage = `url(${user.avatar})`;
@@ -153,14 +155,14 @@ function changeAvatar(evt) {
 function createNewCard(evt) {
     evt.preventDefault();
     popupCardButton.textContent = 'Сохранение...';
-    Promise.all([postCard(inputCardName.value, inputUrl.value), getUserInfo()])
-        .then(([card, user]) => {
-            addCard(card, user);
+    postCard(inputCardName.value, inputUrl.value).then((card) => {
+            addCard(card);
             closeModal(popupCard);
-        }).catch((error) => {
+        }
+    ).catch((error) => {
         console.log(error);
     }).finally(() => popupCardButton.textContent = 'Сохранить');
-};
+}
 
 function openPopupImage(card) {
     return function () {

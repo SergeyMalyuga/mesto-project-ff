@@ -2,7 +2,7 @@ import {addLike, deleteLike} from "./api";
 
 const cardTemplate = document.querySelector('#card-template').content;
 
-function createCard(card, user, likeStatus, openPopupImage, removeCard, countLikes = 0) {
+function createCard(card, userId, likeStatus, openPopupImage, removeCard, countLikes = 0) {
     const newCard = cardTemplate.querySelector('.card').cloneNode(true);
     const likeCount = newCard.querySelector('.card__like-count');
     const likeButton = newCard.querySelector('.card__like-button');
@@ -15,16 +15,16 @@ function createCard(card, user, likeStatus, openPopupImage, removeCard, countLik
         removeCard(card._id, newCard));
     likeButton.addEventListener('click', () => likeStatus(card, likeButton, deleteButton, likeCount));
     newCard.querySelector('.card__image').addEventListener('click', openPopupImage);
-    isUserOwner(card, user, deleteButton, likeButton);
+    isUserOwner(card, userId, deleteButton, likeButton);
     return newCard;
 };
 
-function isUserOwner(card, user, deleteButton, likeButton) {
-    if (card.owner._id.localeCompare(user._id) !== 0) {
+function isUserOwner(card, userId, deleteButton, likeButton) {
+    if (card.owner._id.localeCompare(userId) !== 0) {
         deleteButton.style.display = 'none';
     }
     card.likes.some(like => {
-        if (like._id.localeCompare(user._id) === 0) {
+        if (like._id.localeCompare(userId) === 0) {
             likeButton.classList.add('card__like-button_is-active');
         }
     })
